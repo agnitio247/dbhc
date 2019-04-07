@@ -5,9 +5,14 @@ const char* hexTable;
 const char* DecToBin(double decimalNumber, char** ptr);
 const char* DecToHex(double decimalNumber, char** ptr);
 
-const char* BinToDec(double binaryNumber);
-const char* BinToHex(double binaryNumber);
-const char* HexToDec(double hexadecimalNumber);
-const char* HexToBin(double hexadecimalNumber);
+double BinToDec(char* binaryNumber);
+const char* BinToHex(char* binaryNumber);
+double HexToDec(char* hexadecimalNumber);
+const char* HexToBin(char* hexadecimalNumber);
 
-const char* TwosCompliment(double binaryNumber);
+char* TwosCompliment(char* binaryNumber);
+
+const char* ConvertDec(double decimalNumber, char** ptr, int base);
+double ConvertToDec(char* xBaseNumber, int base, int size);
+
+const char* ConvertBase(char* xBaseNumber, int base1, int base2);
