@@ -3,12 +3,12 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "dbh.h"
+#include "../include/dbh.h"
 
 const char charTable[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 // convert dec to every base from 2 to 36
-const char* ConvertDec(double decimalNumber, char** ptr, int base) {
+const char* ConvertDec(double decimalNumber, char** ptr, int base, int* length) {
   char* output = NULL; // doesn't work if not specifed NULL for some fucking stupid reason
   int sizeOfOutput = 0; // initialize as 0 to check later
   int power;
@@ -41,6 +41,7 @@ const char* ConvertDec(double decimalNumber, char** ptr, int base) {
     output[sizeOfOutput - (power+1)] = charTable[multiplicator]; // reverse and convert to char
     decimalNumber -= multiplicator*pow(base, power);
   }
+  *length = sizeOfOutput;
   *ptr = output; // be able to free() outside function
   return output;
 }
@@ -48,13 +49,43 @@ const char* ConvertDec(double decimalNumber, char** ptr, int base) {
 // convert to dec from base 2 to 36
 double ConvertToDec(char* xBaseNumber, int base, int size) {
   double output;
-  for (int i = 0; i < size; i++) { // nested for loops cuz thats how it is
-    for (int j = 0; j < 36; i++) { // really need to optimize this somehow
-      if (charTable[j] == xBaseNumber[i]) { // this is really bad
-        output += j*i;
+  for (int i = 0; i < size; i++) {
+    for (int j = 0; i < 36; j++) {
+      if (charTable[j] == xBaseNumber[i]) {
+        output += j*pow(base, size-i-1);
         break;
       }
     }
   }
   return output;
+}
+
+const char* ConvertBase(char** xBaseNumber, int base1, int base2, int* length) {
+  double decimalNumber = ConvertToDec(*xBaseNumber, base1, *length);
+  ConvertDec(decimalNumber, xBaseNumber, base2, length);
+}
+
+// most common uses
+const char* BinToHex(char** binaryNumber, int* length) {
+  ConvertBase(binaryNumber, 2, 16, length);
+}
+
+const char* HexToBin(char** hexadecimalNumber, int* length) {
+  ConvertBase(hexadecimalNumber, 16, 2, length);
+}
+
+const char* DecToBin(double decimalNumber, char** ptr, int* length) {
+  ConvertDec(decimalNumber, ptr, 2, length);
+}
+
+const char* DecToHex(double decimalNumber, char** ptr, int* length) {
+  ConvertDec(decimalNumber, ptr, 16, length);
+}
+
+double BinToDec(char* binaryNumber, int length) {
+  return ConvertToDec(binaryNumber, 2, length);
+}
+
+double HexToDec(char* hexadecimalNumber, int length) {
+  return ConvertToDec(hexadecimalNumber, 6, length);
 }
