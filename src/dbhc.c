@@ -10,22 +10,9 @@
 
 void PrinAll(char** outputString, int base, int* length);
 void PrintDecToAll(int decimalNumber, char** output, int* length);
-char** ReadFile(char* filename, char** output, int* length, int* size, int* base);
-void WriteToFile(char* filename, char** input);
+char** ReadFile(char* filename, char*** outputArray, int* size, int* base);
 
 int main(int argc, char *argv[]) {
-  // exemple use
-  int decimalNumber; // for xToDec functions
-  char* outputString; // for string outputs
-  int length; // keep track of the output length
-  int base; // define number base
-
-  char** output;
-  int size;
-
-  output = ReadFile("input.txt", output, &length, &size, &base);
-  printf("Size:\t%d\t\tBase:\t%d\n", size, base);
-  printf("%s\n", output[0]);
 
   return 0;
 }
@@ -46,12 +33,12 @@ void PrinAll(char** outputString, int base, int* length) {
   PrintDecToAll(decimalNumber, outputString, length);
 }
 
-char** ReadFile(char* filename, char** output, int* length, int* size, int* base) {
+char** ReadFile(char* filename, char*** outputArray, int* size, int* base) {
+  char** output;
   char buffer[BUFFER];
   int maxLine, inputBase, currentLine, maxLength;
   FILE* file = fopen(filename, "r");
   fscanf(file, "%d %d %d", &maxLine, &maxLength, &inputBase); // get file parameters
-  *length = maxLength; // to keep track of string length
   *size = maxLine;
   *base = inputBase;
   output = (char**)malloc(maxLine*sizeof(char)); // i know sizeof(char) == 1
@@ -63,12 +50,12 @@ char** ReadFile(char* filename, char** output, int* length, int* size, int* base
     while (fscanf(file, "%s", buffer) == 1 && currentLine < maxLine) {
       strcpy(output[currentLine], buffer);
       strcat(output[currentLine], "\0");
-      printf("%c\n", output[currentLine][0]);
       currentLine++;
     }
     fclose(file);
   } else {
     //return "FILE_ERROR";
   }
+  *outputArray = output;
   return output;
 }
