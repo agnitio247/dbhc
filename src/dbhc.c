@@ -10,52 +10,58 @@
 
 void PrinAll(char** outputString, int base, int* length);
 void PrintDecToAll(int decimalNumber, char** output, int* length);
-char* ReadFile(char* filename, char*** outputArray, int* size, int* base);
+char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* maxLengthPtr, int* basePtr);
 
 int main(int argc, char *argv[]) {
 
-  int decimalNumber, size, length, base;
-  char* outputString;
-  char** outputArray;
+  int lines, maxLength, base, currentLine;
 
-  if (ReadFile("input.txt", &outputArray, &size, &base) != "ERROR") {
-    printf("%s\n", "success");
-    printf("%s\n", outputArray[0]);
-    printf("%s\n", outputArray[1]);
-    printf("%s\n", outputArray[2]);
-    printf("%s\n", *(outputArray+3));
-    printf("%s\n", *(outputArray+4));
-    printf("%s\n", *(outputArray+5));
-    printf("%s\n", *(outputArray+6));
-    printf("%s\n", *(outputArray+7));
-  } else {
-    printf("%s\n", "Error opening file");
+  char** ptr;
+
+  ReadFile("input.txt", &ptr, &lines, &maxLength, &base);
+
+  for (int i = 0; i < lines; i++) {
+    printf("%s\n", ptr[i]);
+    free(ptr[i]);
   }
 
   return 0;
 }
 
-char* ReadFile(char* filename, char*** outputArray, int* size, int* base) {
-  char buffer[BUFFER_SIZE];
-  int maxLine, inputBase, currentLine, maxLength;
-  FILE* file = fopen(filename, "r");
-  if (file != NULL) { // NULL if file error
-    fscanf(file, "%d %d %d", &maxLine, &maxLength, &inputBase); // get file parameters
-    char* output[maxLine]; // create output
-    currentLine = 0; // keep track of position
-    while (fscanf(file, "%s", buffer) == 1 && currentLine < maxLine) { // check errors
-      output[currentLine] = (char*)malloc(sizeof(char)*(maxLength+1)); //
-      strcpy(output[currentLine], strcat(buffer, "\0")); // need last char to be null
-      currentLine++;
+void PrintDecToAll(int decimalNumber, char** output, int* length) {
+  for (int i = 2; i <= MAX_BASE; i++) {
+    ConvertDec(decimalNumber, output, i, length);
+    if (i < 10) {
+      printf("Base 0%d:\t%s\n", i, *output); // to make it look better
+    } else {
+      printf("Base %d:\t%s\n", i, *output);
     }
-    *outputArray = output;
-    *size = maxLine;
-    *base = inputBase;
-    printf("%s\n", *((*outputArray)+3));
-    fclose(file);
-    return "SUCCESS";
-  } else { // if file not found
-    return "ERROR";
-    fclose(file);
   }
+}
+
+void PrinAll(char** outputString, int base, int* length) {
+  int decimalNumber = ConvertToDec(*outputString, base, *length);
+  PrintDecToAll(decimalNumber, outputString, length);
+}
+
+char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* maxLengthPtr, int* basePtr) {
+  int lines, maxLength, base, currentLine;
+  char buffer[BUFFER_SIZE];
+  FILE* file = fopen("input.txt", "r");
+  if (fscanf(file, "%d %d %d", &lines, &maxLength, &base) == 3) {
+  } else {
+    return "FILE_ERROR";
+  }
+  char** arr = (char**)malloc(sizeof(char*)*lines);
+  currentLine = 0;
+  while (fscanf(file, "%s", buffer) == 1 && currentLine < lines) {
+    arr[currentLine] = (char*)malloc(sizeof(char)*(maxLength+1));
+    strcpy(arr[currentLine], strcat(buffer, "\0"));
+    currentLine++;
+  }
+  *ptr = arr;
+  *linesPtr = lines;
+  *maxLengthPtr = maxLength;
+  *basePtr = base;
+  fclose(file);
 }
