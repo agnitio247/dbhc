@@ -3,9 +3,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "../include/dbh.h"
+#include "../include/Convert.h"
 
-const char charTable[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+char charTable[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 // convert dec to every base from 2 to 36
 const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length) {
@@ -13,7 +13,7 @@ const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length) {
   int sizeOfOutput = 0; // initialize as 0 to check later
   int power;
   int multiplicator;
-  if (base > 36 || base < 2) { // max and min base
+  if (base > MAX_BASE || base < 2) { // max and min base
     output = malloc(11);
     strcpy(output, "BASE_ERROR\0");
     *ptr = output;
@@ -51,7 +51,7 @@ const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length) {
 int ConvertToDec(char* xBaseNumber, int base, int size) {
   int output;
   for (int i = 0; i < size; i++) { // nested for loops cuz thats how it is
-    for (int j = 0; i < 36; j++) { // really need to optimize this somehow
+    for (int j = 0; i < MAX_BASE; j++) { // really need to optimize this somehow
       if (charTable[j] == xBaseNumber[i]) { // this is bad
         output += j*pow(base, size-i-1);
         break;

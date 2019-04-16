@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_BASE 36
+
 // base functions
 const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length);
 int ConvertToDec(char* xBaseNumber, int base, int size);
