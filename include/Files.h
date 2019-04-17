@@ -2,4 +2,4 @@
 
 #define BUFFER_SIZE 50
 
-char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* maxLengthPtr, int* basePtr);
+char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* basePtr);

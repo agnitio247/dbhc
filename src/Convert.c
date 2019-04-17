@@ -34,10 +34,10 @@ const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length) {
     }
     if (output == NULL) { // check if output is assigned
       output = malloc(sizeOfOutput + 1); // + 1 for extra character (char is 1 byte)
-      output[sizeOfOutput] = '\0';
       for (int i = 0; i < sizeOfOutput; i++) { // set characters to 0
         strcat(output, "0");
       }
+      output[sizeOfOutput] = '\0';
     }
     output[sizeOfOutput - (power+1)] = charTable[multiplicator]; // reverse and convert to char
     decimalNumber -= multiplicator*pow(base, power);
@@ -54,6 +54,7 @@ int ConvertToDec(char* xBaseNumber, int base, int size) {
     for (int j = 0; i < MAX_BASE; j++) { // really need to optimize this somehow
       if (charTable[j] == xBaseNumber[i]) { // this is bad
         output += j*pow(base, size-i-1);
+        printf("%d\n", output);
         break;
       }
     }
