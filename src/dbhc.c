@@ -9,22 +9,19 @@
 
 int main(int argc, char *argv[]) {
 
+  int decNum, length, size, base;
   char* fileName;
   char** arr;
-  int base, lines, length, decimalNumber;
 
-  fileName = "input.txt";
-  ReadFile(fileName, &arr, &lines, &base);
-  for (int i = 0; i < lines; i++) {
-    printf("%s : %d - base: %d - len: %d\n", arr[i], ConvertToDec(arr[i], base, strlen(arr[i])), base, strlen(arr[i]));
+  ReadFile(fileName, &arr, &size, &base);
+
+  for (int i = 0; i < size; i++) {
+    length = strlen(arr[i]);
+    ConvertToDec(arr[i], &decNum, base, length);
+    printf("%s : %d\n", arr[i], decNum);
     free(arr[i]);
   }
   free(arr);
-
-  char* num = "00101110101";
-  int base2 = 2;
-  int length2 = 11;
-  printf("%s : %d\n", num, ConvertToDec(num, base2, length2));
 
   return 0;
 }

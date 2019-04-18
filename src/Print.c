@@ -16,6 +16,7 @@ void PrintDecToAll(int decimalNumber, char** output, int* length) {
 }
 
 void PrintAll(char** outputString, int base, int* length) {
-  int decimalNumber = ConvertToDec(*outputString, base, *length);
+  int decimalNumber;
+  ConvertToDec(*outputString, &decimalNumber, base, *length);
   PrintDecToAll(decimalNumber, outputString, length);
 }

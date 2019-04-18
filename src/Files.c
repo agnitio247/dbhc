@@ -23,8 +23,5 @@ char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* basePtr) {
   *ptr = arr;
   *linesPtr = lines; // keep track of number of lines
   *basePtr = base; // keep track of input base
-  for (int i = 0; i < lines; i++) {
-
-  }
   fclose(file);
 }

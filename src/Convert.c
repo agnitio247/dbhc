@@ -48,22 +48,22 @@ const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length) {
 }
 
 // convert to dec from base 2 to 36
-int ConvertToDec(char* xBaseNumber, int base, int size) {
-  int output;
+int ConvertToDec(char* xBaseNumber, int* decimalNumber, int base, int size) {
+  int output = 0;
   for (int i = 0; i < size; i++) { // nested for loops cuz thats how it is
     for (int j = 0; i < MAX_BASE; j++) { // really need to optimize this somehow
       if (charTable[j] == xBaseNumber[i]) { // this is bad
         output += j*pow(base, size-i-1);
-        printf("%d\n", output);
         break;
       }
     }
   }
-  return output;
+  *decimalNumber = output;
 }
 
 const char* ConvertBase(char** xBaseNumber, int base1, int base2, int* length) {
-  int decimalNumber = ConvertToDec(*xBaseNumber, base1, *length);
+  int decimalNumber;
+  ConvertToDec(*xBaseNumber, &decimalNumber, base1, *length);
   ConvertDec(decimalNumber, xBaseNumber, base2, length);
 }
 
@@ -84,10 +84,10 @@ const char* DecToHex(int decimalNumber, char** ptr, int* length) {
   ConvertDec(decimalNumber, ptr, 16, length);
 }
 
-int BinToDec(char* binaryNumber, int length) {
-  return ConvertToDec(binaryNumber, 2, length);
+int BinToDec(char* binaryNumber, int* decimalNumber, int length) {
+  ConvertToDec(binaryNumber, decimalNumber, 2, length);
 }
 
-int HexToDec(char* hexadecimalNumber, int length) {
-  return ConvertToDec(hexadecimalNumber, 16, length);
+int HexToDec(char* hexadecimalNumber, int* decimalNumber, int length) {
+  ConvertToDec(hexadecimalNumber, decimalNumber, 16, length);
 }
