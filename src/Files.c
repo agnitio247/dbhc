@@ -3,8 +3,10 @@
 #include <stdlib.h>
 
 #include "../include/Files.h"
+#include "../include/Convert.h"
 
-char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* basePtr) {
+// TODO: fix mem leak
+char* ReadFile(const char* fileName, char*** ptr, int* basePtr, int* linesPtr) {
   int lines, bufferLength, base, currentLine;
   char buffer[BUFFER_SIZE]; // change value in header file
   FILE* file = fopen("input.txt", "r"); // open in read mode
@@ -24,4 +26,16 @@ char* ReadFile(const char* fileName, char*** ptr, int* linesPtr, int* basePtr) {
   *linesPtr = lines; // keep track of number of lines
   *basePtr = base; // keep track of input base
   fclose(file);
+}
+
+char* ConvertFromFile(const char* fileName, char*** ptr, int base, int* linesPtr) {
+  int basePtr, lines, length;
+  char** arr;
+  ReadFile(fileName, &arr, &basePtr, &lines); // get input from file
+  for (int i = 0; i < lines; i++) {
+    length = strlen(arr[i]);
+    ConvertBase(&arr[i], basePtr, base, &length); // convert it
+  }
+  *linesPtr = lines;
+  *ptr = arr;
 }

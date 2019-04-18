@@ -9,16 +9,13 @@
 
 int main(int argc, char *argv[]) {
 
-  int decNum, length, size, base;
-  char* fileName;
   char** arr;
+  int size;
 
-  ReadFile(fileName, &arr, &size, &base);
+  ConvertFromFile("input.txt", &arr, 16, &size);
 
   for (int i = 0; i < size; i++) {
-    length = strlen(arr[i]);
-    ConvertToDec(arr[i], &decNum, base, length);
-    printf("%s : %d\n", arr[i], decNum);
+    printf("%s\n", arr[i]);
     free(arr[i]);
   }
   free(arr);
