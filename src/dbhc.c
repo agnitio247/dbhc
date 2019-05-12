@@ -13,9 +13,9 @@ int main(int argc, char *argv[]) {
   int size;
 
   ConvertFromFile("input.txt", &arr, 16, &size);
+  WriteToFile("output.txt", arr, 16, size);
 
   for (int i = 0; i < size; i++) {
-    printf("%s\n", arr[i]);
     free(arr[i]);
   }
   free(arr);

@@ -33,7 +33,11 @@ const char* ConvertDec(int decimalNumber, char** ptr, int base, int* length) {
       sizeOfOutput = power + 1; // one bigger because start at 0
     }
     if (output == NULL) { // check if output is assigned
-      output = (char*)malloc(sizeOfOutput + 1); // + 1 for extra character (char is 1 byte)
+      if (*ptr == NULL) {
+        output = (char*)malloc(sizeOfOutput + 1); // + 1 for extra character (char is 1 byte)
+      } else {
+        output = *ptr;
+      }
       strcpy(output, "");
       for (int i = 0; i < sizeOfOutput; i++) { // set characters to 0
         strcat(output, "0");

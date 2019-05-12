@@ -28,6 +28,7 @@ char* ReadFile(const char* fileName, char*** ptr, int* basePtr, int* linesPtr) {
   fclose(file);
 }
 
+// TODO: realloc each string
 char* ConvertFromFile(const char* fileName, char*** ptr, int base, int* linesPtr) {
   int basePtr, lines, length;
   char** arr;
@@ -38,4 +39,15 @@ char* ConvertFromFile(const char* fileName, char*** ptr, int base, int* linesPtr
   }
   *linesPtr = lines;
   *ptr = arr;
+}
+
+char* WriteToFile(const char* fileName, char** arr, int base, int length) {
+  FILE* file = fopen(fileName, "a"); // append mode
+  char firstLine[BUFFER_SIZE]; // change value in Convert header file
+  sprintf(firstLine, "%d %d\n", length, base);
+  fputs(firstLine, file); // first line of file
+  for (int i = 0; i < length; i++){
+    fputs(strcat(arr[i], "\n"), file);
+  }
+  fclose(file);
 }
